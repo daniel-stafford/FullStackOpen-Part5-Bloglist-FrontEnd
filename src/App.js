@@ -17,26 +17,26 @@ const App = () => {
     blogService.getAll().then(blogs => setBlogs(blogs))
   }, [])
 
-  const handleLogin = event => {
+  const handleLogin = async event => {
     event.preventDefault()
     console.log('logging in with', username, password)
-  }
-
-  const handleAddBlog = async event => {
-    event.preventDefault()
-    console.log('saving', username, password)
     try {
       const user = await loginService.login({
         username,
         password
       })
-
       setUser(user)
       setUsername('')
       setPassword('')
     } catch (exception) {
-      // ...
+      console.log(exception)
     }
+  }
+
+  const handleAddBlog = async event => {
+    event.preventDefault()
+    console.log('saving', title, author, url)
+  
   }
 
   const loginForm = () => (
@@ -103,10 +103,14 @@ const App = () => {
 
       {user === null ? (
         loginForm()
+        
       ) : (
         <div>
           <p>{user.name} logged in</p>
           {blogForm()}
+          {blogs.map(blog =>
+        <Blog key={blog.id} blog={blog} />
+          )}
         </div>
       )}
     </div>
