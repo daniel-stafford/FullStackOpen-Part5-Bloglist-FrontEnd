@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const Blog = ({ blog, handleLike, handleRemove }) => {
+const Blog = ({ blog, handleLike, handleRemove, user }) => {
   const [expandBlog, setExpandBlog] = useState(false)
   const blogStyle = {
     paddingTop: 10,
@@ -9,7 +9,6 @@ const Blog = ({ blog, handleLike, handleRemove }) => {
     borderWidth: 1,
     marginBottom: 5
   }
-
   return (
     <div style={blogStyle}>
       <div
@@ -28,7 +27,9 @@ const Blog = ({ blog, handleLike, handleRemove }) => {
             <button onClick={() => handleLike({ blog })}>Like</button>
           </p>
           <p>Added by {blog.user.name}</p>
-          <button onClick={() => handleRemove({ blog })}>Remove</button>
+          {user.username === blog.user.username && (
+            <button onClick={() => handleRemove({ blog })}>Remove</button>
+          )}
         </div>
       )}
       <div></div>
