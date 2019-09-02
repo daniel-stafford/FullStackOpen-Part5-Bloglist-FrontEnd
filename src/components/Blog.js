@@ -12,16 +12,15 @@ const Blog = ({ blog, handleLike, handleRemove, user }) => {
   }
   return (
     <div style={blogStyle}>
-      <div
+      <div className='wholeBlog'
         onClick={() => {
           console.log('blog clicked!')
           setExpandBlog(!expandBlog)
         }}
       >
         {blog.title} {blog.author}
-      </div>
       {expandBlog && (
-        <div>
+        <div className='extraContent'>
           <p>{blog.url}</p>
           <p>
             {blog.likes} likes{' '}
@@ -33,6 +32,8 @@ const Blog = ({ blog, handleLike, handleRemove, user }) => {
           )}
         </div>
       )}
+            </div>
+
       <div></div>
     </div>
   )
