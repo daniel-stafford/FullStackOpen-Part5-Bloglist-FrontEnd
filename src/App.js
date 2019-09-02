@@ -59,6 +59,25 @@ const App = () => {
     }
   }
 
+  const handleLike = async blog => {
+    console.log('you clicked like!', blog.blog.id)
+    try {
+      const newObject = { ...blog.blog, likes: blog.blog.likes + 1 }
+
+      blogService.update(blog.blog.id, newObject)
+      setBlogs(blogs.map(p => (p.id === blog.blog.id ? newObject : p)))
+      setNotification({ type: 'success', message: 'Liked!' })
+      setTimeout(() => {
+        setNotification({ type: null, message: null })
+      }, 1000)
+    } catch (error) {
+      setNotification({ type: 'error', message: `error: ${error}` })
+      setTimeout(() => {
+        setNotification({ type: null, message: null })
+      }, 5000)
+    }
+  }
+
   const loginForm = () => (
     <form onSubmit={handleLogin}>
       <h2>Login</h2>
@@ -154,7 +173,7 @@ const App = () => {
             <button onClick={() => setAddBlogVisible(false)}>Cancel</button>
           </div>
           {blogs.map(blog => (
-            <Blog key={blog.id} blog={blog} />
+            <Blog key={blog.id} blog={blog} handleLike={handleLike} />
           ))}
         </div>
       )}
