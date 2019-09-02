@@ -3,6 +3,7 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/Notification'
+import BlogForm from './components/BlogForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -16,6 +17,7 @@ const App = () => {
     message: null,
     type: null
   })
+  const [addBlogVisible, setAddBlogVisible] = useState(false)
 
   useEffect(() => {
     blogService.getAll().then(blogs => setBlogs(blogs))
@@ -92,6 +94,9 @@ const App = () => {
     }, 5000)
   }
 
+  const hideWhenVisible = { display: addBlogVisible ? 'none' : '' }
+  const showWhenVisible = { display: addBlogVisible ? '' : 'none' }
+
   const handleAddBlog = async event => {
     event.preventDefault()
     try {
@@ -101,6 +106,7 @@ const App = () => {
         url
       }
       await blogService.create(blogObject)
+      setBlogs(blogs.concat(blogObject))
       setNotification({ type: 'success', message: `blog added!` })
       setTimeout(() => {
         setNotification({ type: null, message: null })
@@ -120,39 +126,6 @@ const App = () => {
     }
   }
 
-  const blogForm = () => (
-    <form onSubmit={handleAddBlog}>
-      <h2>Create new blog</h2>
-      <div>
-        title
-        <input
-          type='text'
-          value={title}
-          name='title'
-          onChange={({ target }) => setTitle(target.value)}
-        />
-      </div>
-      <div>
-        author
-        <input
-          type='text'
-          value={author}
-          name='Author'
-          onChange={({ target }) => setAuthor(target.value)}
-        />
-      </div>
-      <div>
-        url
-        <input
-          type='text'
-          value={url}
-          name='url'
-          onChange={({ target }) => setUrl(target.value)}
-        />
-      </div>
-      <button type='submit'>Create Post</button>
-    </form>
-  )
   return (
     <div>
       <h1>Blog</h1>
@@ -165,7 +138,21 @@ const App = () => {
           <p>
             {user.name} logged in<button onClick={handleLogOut}>Log out</button>
           </p>
-          {blogForm()}
+          <div style={hideWhenVisible}>
+            <button onClick={() => setAddBlogVisible(true)}>New Post</button>
+          </div>
+          <div style={showWhenVisible}>
+            <BlogForm
+              handleAddBlog={handleAddBlog}
+              title={title}
+              setTitle={setTitle}
+              author={author}
+              setAuthor={setAuthor}
+              url={url}
+              setUrl={setUrl}
+            />
+            <button onClick={() => setAddBlogVisible(false)}>Cancel</button>
+          </div>
           {blogs.map(blog => (
             <Blog key={blog.id} blog={blog} />
           ))}
