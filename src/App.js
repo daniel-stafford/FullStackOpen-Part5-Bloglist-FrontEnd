@@ -172,9 +172,13 @@ const App = () => {
             />
             <button onClick={() => setAddBlogVisible(false)}>Cancel</button>
           </div>
-          {blogs.map(blog => (
-            <Blog key={blog.id} blog={blog} handleLike={handleLike} />
-          ))}
+          {blogs
+            .sort((a, b) => {
+              return b.likes - a.likes
+            })
+            .map(blog => (
+              <Blog key={blog.id} blog={blog} handleLike={handleLike} />
+            ))}
         </div>
       )}
     </div>
