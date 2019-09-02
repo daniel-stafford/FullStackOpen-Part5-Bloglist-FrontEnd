@@ -60,7 +60,6 @@ const App = () => {
   }
 
   const handleLike = async blog => {
-    console.log('you clicked like!', blog.blog.id)
     try {
       const newObject = { ...blog.blog, likes: blog.blog.likes + 1 }
 
@@ -122,10 +121,13 @@ const App = () => {
       const blogObject = {
         title,
         author,
-        url
+        url,
+        user,
+        likes: 0
       }
-      await blogService.create(blogObject)
-      setBlogs(blogs.concat(blogObject))
+
+      const proessedBlog = await blogService.create(blogObject)
+      setBlogs(blogs.concat(proessedBlog))
       setNotification({ type: 'success', message: `blog added!` })
       setTimeout(() => {
         setNotification({ type: null, message: null })
@@ -142,6 +144,33 @@ const App = () => {
       setTimeout(() => {
         setNotification({ type: null, message: null })
       }, 5000)
+    }
+  }
+
+  const handleRemove = async ({ blog }) => {
+    console.log('you clicked remove', blog.id)
+    if (
+      window.confirm(
+        `Do you really want to remove ${blog.title} by ${blog.author}`
+      )
+    ) {
+      try {
+        await blogService.remove(blog.id, user.token)
+        setBlogs(blogs.filter(p => p.id !== blog.id))
+        setNotification({ type: 'success', message: `${blog.title} deleted!` })
+        setTimeout(() => {
+          setNotification({ type: null, message: null })
+        }, 5000)
+      } catch (e) {
+        console.log(e)
+        setNotification({
+          type: 'error',
+          message: `Error deleting blog: ${e}`
+        })
+        setTimeout(() => {
+          setNotification({ type: null, message: null })
+        }, 5000)
+      }
     }
   }
 
@@ -177,7 +206,12 @@ const App = () => {
               return b.likes - a.likes
             })
             .map(blog => (
-              <Blog key={blog.id} blog={blog} handleLike={handleLike} />
+              <Blog
+                key={blog.id}
+                blog={blog}
+                handleLike={handleLike}
+                handleRemove={handleRemove}
+              />
             ))}
         </div>
       )}
