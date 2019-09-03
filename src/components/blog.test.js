@@ -44,7 +44,6 @@ describe('<Blog/>', () => {
     expect(extraContent).toBeNull()
     fireEvent.click(wholeBlog)
     extraContent = component.container.querySelector('.extraContent')
-    console.log(prettyDOM(extraContent))
     expect(extraContent).not.toBeNull()
   })
 })

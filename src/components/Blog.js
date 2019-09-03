@@ -11,28 +11,29 @@ const Blog = ({ blog, handleLike, handleRemove, user }) => {
     marginBottom: 5
   }
   return (
-    <div style={blogStyle}>
-      <div className='wholeBlog'
+    <div style={blogStyle} className='blog'>
+      <div
+        className='wholeBlog'
         onClick={() => {
           console.log('blog clicked!')
           setExpandBlog(!expandBlog)
         }}
       >
         {blog.title} {blog.author}
-      {expandBlog && (
-        <div className='extraContent'>
-          <p>{blog.url}</p>
-          <p>
-            {blog.likes} likes{' '}
-            <button onClick={() => handleLike({ blog })}>Like</button>
-          </p>
-          <p>Added by {blog.user.name}</p>
-          {user.username === blog.user.username && (
-            <button onClick={() => handleRemove({ blog })}>Remove</button>
-          )}
-        </div>
-      )}
-            </div>
+        {expandBlog && (
+          <div className='extraContent'>
+            <p>{blog.url}</p>
+            <p>
+              {blog.likes} likes{' '}
+              <button onClick={() => handleLike({ blog })}>Like</button>
+            </p>
+            <p>Added by {blog.user.name}</p>
+            {user.username === blog.user.username && (
+              <button onClick={() => handleRemove({ blog })}>Remove</button>
+            )}
+          </div>
+        )}
+      </div>
 
       <div></div>
     </div>

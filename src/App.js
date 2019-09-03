@@ -4,11 +4,12 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/Notification'
 import BlogForm from './components/BlogForm'
+import { useField } from './hooks'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  // const [username, setUsername] = useState('')
+  // const [password, setPassword] = useState('')
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -18,6 +19,9 @@ const App = () => {
     type: null
   })
   const [addBlogVisible, setAddBlogVisible] = useState(false)
+
+  const password = useField('password')
+  const username = useField('text')
 
   useEffect(() => {
     blogService.getAll().then(blogs => setBlogs(blogs))
@@ -37,8 +41,8 @@ const App = () => {
     console.log('logging in with', username, password)
     try {
       const user = await loginService.login({
-        username,
-        password
+        username: username.value,
+        password: password.value
       })
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
       blogService.setToken(user.token)
@@ -48,8 +52,8 @@ const App = () => {
       setTimeout(() => {
         setNotification({ type: null, message: null })
       }, 5000)
-      setUsername('')
-      setPassword('')
+      // setUsername('')
+      // setPassword('')
     } catch (exception) {
       console.log(exception)
       setNotification({ type: 'error', message: 'Wrong credentials' })
@@ -82,21 +86,11 @@ const App = () => {
       <h2>Login</h2>
       <div>
         username
-        <input
-          type='text'
-          value={username}
-          name='Username'
-          onChange={({ target }) => setUsername(target.value)}
-        />
+        <input {...username} />
       </div>
       <div>
         password
-        <input
-          type='password'
-          value={password}
-          name='Password'
-          onChange={({ target }) => setPassword(target.value)}
-        />
+        <input {...password} />
       </div>
       <button type='submit'>login</button>
     </form>
