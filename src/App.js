@@ -52,8 +52,8 @@ const App = () => {
       setTimeout(() => {
         setNotification({ type: null, message: null })
       }, 5000)
-      // setUsername('')
-      // setPassword('')
+      username.reset()
+      password.reset()
     } catch (exception) {
       console.log(exception)
       setNotification({ type: 'error', message: 'Wrong credentials' })
