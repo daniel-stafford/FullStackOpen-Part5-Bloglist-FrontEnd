@@ -41,8 +41,8 @@ const App = () => {
     console.log('logging in with', username, password)
     try {
       const user = await loginService.login({
-        username: username.value,
-        password: password.value
+        username: username.data.value,
+        password: password.data.value
       })
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
       blogService.setToken(user.token)
@@ -86,11 +86,11 @@ const App = () => {
       <h2>Login</h2>
       <div>
         username
-        <input {...username} />
+        <input {...username.data} />
       </div>
       <div>
         password
-        <input {...password} />
+        <input {...password.data} />
       </div>
       <button type='submit'>login</button>
     </form>
